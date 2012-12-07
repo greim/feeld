@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<title>jquery.feeld.js</title>
+<script src="jquery.js"></script>
+<script src="underscore.js"></script>
+<script src="backbone.js"></script>
+<script src="jquery.feeld.js"></script>
+
+<link type="text/css" rel="stylesheet" href="feeld.css">
+
+<style tyle="text/css">
+body{
+	padding:20px 40px;
+	margin:0;
+	background:#fff;
+	font-family:sans-serif;
+	font-size:14px;
+}
+.foo-label{
+	display:block;
+	color:#888;
+	margin:5px 0;
+}
+</style>
+
+<form style="width:25em" id="form">
+
+<p><label><span class="foo-label">Field label</span> <input autofocus placeholder="Enter a value..." type="text"></label></p>
+<p><label><span class="foo-label">Field label</span> <input type="text"></label></p>
+<p><label><span class="foo-label">Field label</span> <input type="text" maxlength="40"></label></p>
+<p><label><span class="foo-label">Field label</span> <input type="text" placeholder="Enter a value..." maxlength="40"></label></p>
+<p><label><span class="foo-label">Field label</span> <input disabled type="text"></label></p>
+<p><label><span class="foo-label">Field label</span> <input disabled type="text" value="some text" maxlength="40"></label></p>
+<p><label><span class="foo-label">Field label</span> <input class="search" placeholder="Search" type="text"></label></p>
+<p><label><span class="foo-label">Field label</span> <input class="search" disabled placeholder="Search" type="text"></label></p>
+
+<p>
+<label><input type="checkbox"> include blah</label>
+</p>
+
+<p>
+<label><input type="radio" name="bar" value="x"> thing 1</label>
+<label><input type="radio" name="bar" value="y"> thing 2</label>
+<label><input type="radio" name="bar" value="z"> thing 3</label>
+</p>
+
+<p>
+<label>
+<span class="foo-label">Textarea</span>
+<textarea>Here is some text</textarea>
+</label>
+</p>
+
+</form>
+
+<script>
+$('form').feeld();
+</script>
+
+</html>
