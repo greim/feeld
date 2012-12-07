@@ -238,9 +238,65 @@ tip
 	padding:.7em .9em;
 }
 
+/*
+-------------------------------------------------------------------
+textarea
+*/
 
-
-
+.tf-area{
+	white-space:normal;
+}
+.tf-area .tf-placeholder,
+.tf-area .tf-counter{
+	white-space:nowrap;
+}
+.tf-area textarea{
+	resize:none;
+	display:block;
+	border:none;
+	background:transparent;
+	margin:0;
+	padding:0;
+	font:inherit;
+	color:inherit;
+	width:100%;
+	min-height:5em;
+	text-shadow:0 .1em .25em rgba(0,0,0,0.2);
+	line-height:1.2;
+}
+.tf-area textarea:focus{
+	outline:none;
+}
+.tf-area > .tf-inner{
+	display:block;
+	position: relative;
+	padding:.6em .6em;
+	width:auto;
+}
+.tf-area > .tf-inner > span{
+	display:inline;
+	padding:0;
+}
+.tf-area .tf-placeholder{
+	position:absolute;
+	top:.6em;
+	left:.6em;
+	line-height:1em;
+}
+.tf-area .tf-counter{
+	position:absolute;
+	bottom:.4em;
+	right:.5em;
+	width:auto;
+	font-size:.8em;
+	color:#ccc;
+	z-index:2;
+	background:#fff;
+	box-shadow:0 0 2px 1px #fff;
+}
+.tf-area textarea:disabled{
+	text-shadow:0 .1em 0 #fff;
+}
 
 
 

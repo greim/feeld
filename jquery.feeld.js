@@ -39,6 +39,14 @@ SOFTWARE.
       v.render();
     });
 
+    $textarea.each(function(){
+      var data = $(this).attr('data-options') || '{}';
+      data = JSON.parse(data);
+      data.field = this;
+      var v = new TextField(data);
+      v.render();
+    });
+
     return this;
   };
 
@@ -79,10 +87,14 @@ SOFTWARE.
 
     events: {
       'click': 'click',
-      'focus input': 'focus',
-      'blur input': 'blur',
-      'keydown input': 'keydown',
-      'change input': 'change'
+
+      'focus input, textarea': 'focus',
+      'blur input, textarea': 'blur',
+      'keydown input, textarea': 'keydown',
+      'change input, textarea': 'change',
+      'paste input, textarea': 'paste',
+      'cut input, textarea': 'paste'
+
     },
 
     click: function(ev){
@@ -98,6 +110,12 @@ SOFTWARE.
       this.checkChange(ev);
     },
     change: function(ev){
+      this.checkChange(ev);
+    },
+    paste: function(ev){
+      this.checkChange(ev);
+    },
+    cut: function(ev){
       this.checkChange(ev);
     },
 
@@ -171,6 +189,10 @@ SOFTWARE.
         if (tip.length > 25) {
           this.$box.addClass('tf-bigtip');
         }
+      }
+      if ($(field).is('textarea')) {
+        this.$box.addClass('tf-area');
+        this.$('.tf-icon').remove();
       }
     }
   });

@@ -25,6 +25,8 @@ body{
 
 <form style="width:25em" id="form">
 
+<h2>Text fields</h2>
+
 <p><label><span class="foo-label">Field label</span> <input autofocus placeholder="Enter a value..." type="text"></label></p>
 <p><label><span class="foo-label">Field label</span> <input title="Lorem ipsum" type="text" value="some text"></label></p>
 <p><label><span class="foo-label">Field label</span> <input type="text" value="some text"></label></p>
@@ -36,9 +38,13 @@ body{
 <p><label><span class="foo-label">Field label</span> <input title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet ornare urna. Sed faucibus magna at elit condimentum congue" type="text" value="some text"></label></p>
 <p><label><span class="foo-label">Field label</span> <input class="search" placeholder="Search" type="text"></label></p>
 
+<h2>Check boxes</h2>
+
 <p>
 <label><input type="checkbox"> include blah</label>
 </p>
+
+<h2>Radio buttons</h2>
 
 <p>
 <label><input type="radio" name="bar" value="x"> thing 1</label>
@@ -46,12 +52,14 @@ body{
 <label><input type="radio" name="bar" value="z"> thing 3</label>
 </p>
 
-<p>
-<label>
-<span class="foo-label">Textarea</span>
-<textarea>Here is some text</textarea>
-</label>
-</p>
+<h2>Text areas</h2>
+
+<p><label><span class="foo-label">Textarea</span><textarea>Here is some text</textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea placeholder="Enter some text..."></textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea maxlength="400" placeholder="Enter some text..."></textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea disabled maxlength="400" placeholder="Enter some text..."></textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea disabled maxlength="400" placeholder="Enter some text...">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet ornare urna. Sed faucibus magna at elit condimentum congue</textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea maxlength="400" placeholder="Enter some text..." class="error"></textarea></label></p>
 
 </form>
 
