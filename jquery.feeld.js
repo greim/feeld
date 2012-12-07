@@ -162,6 +162,16 @@ SOFTWARE.
       if ($(field).hasClass('error')) {
         this.$box.addClass('tf-error');
       }
+      if ($(field).is('[title]')) {
+        this.$box.addClass('tf-tip');
+        var tip = $(field).attr('title');
+        var text = $('<span class="tf-tip-text"></span>');
+        text.text(tip);
+        text.appendTo(this.$('.tf-icon-after .tf-icon-inner'));
+        if (tip.length > 25) {
+          this.$box.addClass('tf-bigtip');
+        }
+      }
     }
   });
 
