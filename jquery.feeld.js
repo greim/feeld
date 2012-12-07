@@ -48,34 +48,32 @@ SOFTWARE.
   var TextField = Backbone.View.extend({
 
     initialize: function(){
-      this.iconBefore = this.options.iconBefore;
-      this.iconAfter = this.options.iconAfter;
       this.field = this.options.field;
       $(this.field).replaceWith(this.el);
     },
 
-    layout: '<span class="tfeeld">'
-      +'<span class="tfeeld-inner">'
-        +'<span class="tfeeld-icon tfeeld-icon-before">'
-          +'<span class="tfeeld-icon-inner"></span>'
+    layout: '<span class="tf">'
+      +'<span class="tf-inner">'
+        +'<span class="tf-icon tf-icon-before">'
+          +'<span class="tf-icon-inner"></span>'
         +'</span>'
-        +'<span class="tfeeld-placeholder">'
-          +'<span class="tfeeld-placeholder-inner"></span>'
+        +'<span class="tf-placeholder">'
+          +'<span class="tf-placeholder-inner"></span>'
         +'</span>'
-        +'<span class="tfeeld-field">'
-          +'<span class="tfeeld-field-inner"></span>'
+        +'<span class="tf-field">'
+          +'<span class="tf-field-inner"></span>'
         +'</span>'
-        +'<span class="tfeeld-icon tfeeld-icon-after">'
-          +'<span class="tfeeld-icon-inner"></span>'
+        +'<span class="tf-icon tf-icon-after">'
+          +'<span class="tf-icon-inner"></span>'
         +'</span>'
       +'</span>'
     +'</span>',
 
-    counterLayout: '<span class="tfeeld-counter">'
-      +'<span class="tfeeld-counter-inner">'
-        +'<span class="tfeeld-counter-num"></span>'
+    counterLayout: '<span class="tf-counter">'
+      +'<span class="tf-counter-inner">'
+        +'<span class="tf-counter-num"></span>'
         +' / '
-        +'<span class="tfeeld-counter-den"></span>'
+        +'<span class="tf-counter-den"></span>'
       +'</span>'
     +'</span>',
 
@@ -104,11 +102,11 @@ SOFTWARE.
     },
 
     showFocus: function(){
-      this.$box.addClass('focus');
+      this.$box.addClass('tf-focus');
     },
 
     showBlur: function(){
-      this.$box.removeClass('focus');
+      this.$box.removeClass('tf-focus');
     },
 
     checkChange: function(){
@@ -122,53 +120,49 @@ SOFTWARE.
           });
           self.currentValue = val;
           if (!val) {
-            self.$box.removeClass('inuse');
+            self.$box.removeClass('tf-inuse');
           } else {
-            self.$box.addClass('inuse');
+            self.$box.addClass('tf-inuse');
             clearTimeout(self.timeout);
             self.timeout = setTimeout(function(){
               self.trigger('pause', val);
             }, 500);
           }
         }
-        self.$('.tfeeld-counter-num').html(val.length);
+        self.$('.tf-counter-num').html(val.length);
       },1);
     },
 
     render: function() {
       var field = this.field;
       this.$el.html(this.layout);
-      this.$box = this.$('.tfeeld');
-      this.$('.tfeeld-placeholder-inner').text(field.placeholder);
-      if (this.iconBefore) {
-        this.$('.tfeeld-icon-before').show().addClass('tfeeld-icon-'+this.iconBefore);
-      }
-      if (this.iconAfter) {
-        this.$('.tfeeld-icon-after').show().addClass('tfeeld-icon-'+this.iconAfter);
-      }
+      this.$box = this.$('.tf');
+      this.$('.tf-placeholder-inner').text(field.placeholder);
       field.placeholder = '';
       this.currentVal = field.value;
-      this.$('.tfeeld-field-inner').html(field);
+      this.$('.tf-field-inner').html(field);
       this.maxLength = parseInt($(this.field).attr('maxlength'));
       if (this.maxLength) {
         var $counter = $(this.counterLayout);
-        $counter.find('.tfeeld-counter-num').html(this.currentVal.length);
-        $counter.find('.tfeeld-counter-den').html(this.maxLength);
-        this.$('.tfeeld-field').after($counter);
+        $counter.find('.tf-counter-num').html(this.currentVal.length);
+        $counter.find('.tf-counter-den').html(this.maxLength);
+        this.$('.tf-field').after($counter);
       }
       if (field.value) {
-        this.$box.addClass('inuse');
+        this.$box.addClass('tf-inuse');
       }
       if (field.disabled) {
-        this.$box.addClass('disabled');
+        this.$box.addClass('tf-disabled');
       } else if (field.autofocus) {
         $(field).focus();
       }
       if ($(field).hasClass('search')) {
-        this.$box.addClass('search');
+        this.$box.addClass('tf-search');
+      }
+      if ($(field).hasClass('error')) {
+        this.$box.addClass('tf-error');
       }
     }
-    
   });
 
 })(jQuery);
