@@ -30,6 +30,7 @@ SOFTWARE.
 
     var $input = $self.find('input[type="text"],input[type="password"]');
     var $textarea = $self.find('textarea');
+    var $select = $self.find('select');
 
     $input.each(function(){
       var data = $(this).attr('data-options') || '{}';
@@ -47,19 +48,100 @@ SOFTWARE.
       v.render();
     });
 
+    $select.each( function() {
+      var data = $(this).attr('data-options') || '{}';
+      data = JSON.parse(data);
+      data.field = this;
+      var v = new Select(data);
+      v.render();
+    });
+
     return this;
   };
 
   // ################################################################
   // views
 
-  var TextField = Backbone.View.extend({
+  // abstract class to handle common events etc
+  var Control = Backbone.View.extend({
 
     initialize: function(){
       this.field = this.options.field;
       $(this.field).replaceWith(this.el);
     },
+    events: {
+      'click': 'click',
 
+      'focus input, textarea, select': 'focus',
+      'blur input, textarea, select': 'blur',
+      'keydown input, textarea, select': 'keydown',
+      'change input, textarea, select': 'change'
+    },
+
+    click: function(ev){
+	console.log( 'click' );
+      $(this.field).focus();
+    },
+    focus: function(ev){
+	console.log( 'focus' )
+      this.showFocus(ev);
+    },
+    blur: function(ev){
+      this.showBlur(ev);
+    },
+    keydown: function(ev){
+      this.checkChange(ev);
+    },
+    change: function(ev){
+      this.checkChange(ev);
+    },
+ 
+    showFocus: function(){
+      this.$box.addClass('tf-focus');
+    },
+
+    showBlur: function(){
+      this.$box.removeClass('tf-focus');
+    },
+
+ 
+    commonRender: function() {
+      var field = this.field;
+      this.$el.html(this.layout);
+      this.$box = this.$('.tf');
+ 
+      if (field.disabled) {
+        this.$box.addClass('tf-disabled');
+      } else if (field.autofocus) {
+        $(field).focus();
+      }
+      
+      if ($(field).hasClass('error')) {
+        this.$box.addClass('tf-error');
+      }
+      
+      if ($(field).is('[title]')) {
+        this.$box.addClass('tf-tip');
+        var tip = $(field).attr('title');
+        var text = $('<span class="tf-tip-text"></span>');
+        text.text(tip);
+        text.appendTo(this.$('.tf-icon-after .tf-icon-inner'));
+        if (tip.length > 25) {
+          this.$box.addClass('tf-bigtip');
+        }
+      }
+    }
+  }); 
+
+  var TextField = Control.extend({
+    initialize: function( args ) {
+	this.constructor.__super__.initialize.call( this, args );
+	this.events = $.extend({
+	    'paste input, textarea, select': 'paste',
+	    'cut input, textarea, select': 'paste'
+	}, this.events);
+    },
+    
     layout: '<span class="tf">'
       +'<span class="tf-inner">'
         +'<span class="tf-icon tf-icon-before">'
@@ -85,33 +167,6 @@ SOFTWARE.
       +'</span>'
     +'</span>',
 
-    events: {
-      'click': 'click',
-
-      'focus input, textarea': 'focus',
-      'blur input, textarea': 'blur',
-      'keydown input, textarea': 'keydown',
-      'change input, textarea': 'change',
-      'paste input, textarea': 'paste',
-      'cut input, textarea': 'paste'
-
-    },
-
-    click: function(ev){
-      $(this.input).focus();
-    },
-    focus: function(ev){
-      this.showFocus(ev);
-    },
-    blur: function(ev){
-      this.showBlur(ev);
-    },
-    keydown: function(ev){
-      this.checkChange(ev);
-    },
-    change: function(ev){
-      this.checkChange(ev);
-    },
     paste: function(ev){
       this.checkChange(ev);
     },
@@ -120,6 +175,7 @@ SOFTWARE.
     },
 
     showFocus: function(){
+	console.log( 'showFocus' );
       this.$box.addClass('tf-focus');
     },
 
@@ -152,13 +208,12 @@ SOFTWARE.
     },
 
     render: function() {
-      var field = this.field;
-      this.$el.html(this.layout);
-      this.$box = this.$('.tf');
-      this.$('.tf-placeholder-inner').text(field.placeholder);
-      field.placeholder = '';
-      this.currentVal = field.value;
-      this.$('.tf-field-inner').html(field);
+      this.constructor.__super__.commonRender.apply( this );
+      
+      this.$('.tf-placeholder-inner').text(this.field.placeholder);
+      this.field.placeholder = '';
+      this.currentVal = this.field.value;
+      this.$('.tf-field-inner').html(this.field);
       this.maxLength = parseInt($(this.field).attr('maxlength'));
       if (this.maxLength) {
         var $counter = $(this.counterLayout);
@@ -166,34 +221,54 @@ SOFTWARE.
         $counter.find('.tf-counter-den').html(this.maxLength);
         this.$('.tf-field').after($counter);
       }
-      if (field.value) {
+      if (this.field.value) {
         this.$box.addClass('tf-inuse');
       }
-      if (field.disabled) {
-        this.$box.addClass('tf-disabled');
-      } else if (field.autofocus) {
-        $(field).focus();
-      }
-      if ($(field).hasClass('search')) {
+     if ($(this.field).hasClass('search')) {
         this.$box.addClass('tf-search');
       }
-      if ($(field).hasClass('error')) {
-        this.$box.addClass('tf-error');
-      }
-      if ($(field).is('[title]')) {
-        this.$box.addClass('tf-tip');
-        var tip = $(field).attr('title');
-        var text = $('<span class="tf-tip-text"></span>');
-        text.text(tip);
-        text.appendTo(this.$('.tf-icon-after .tf-icon-inner'));
-        if (tip.length > 25) {
-          this.$box.addClass('tf-bigtip');
-        }
-      }
-      if ($(field).is('textarea')) {
+     if ($(this.field).is('textarea')) {
         this.$box.addClass('tf-area');
         this.$('.tf-icon').remove();
       }
+    }
+  });
+
+  var Select = Control.extend({
+    initialize: function( args ) {
+      this.constructor.__super__.initialize.apply( this, args );
+    },
+
+    layout: '<span class="tf fc-select">'
+      + '<span class="fc-s-arrow"></span>'
+      + '<span class="fc-s-text"></span>'
+      + '</span>',
+
+    listLayout: '<ul class="fc-options"></ul>',
+    
+    optionLayout: '<li class="fc-option"></li>',
+
+    click: function( e ) {
+	console.log( 'select click', this, this.events );
+
+      $(this.field).focus();
+    },
+
+    render: function() {
+	var self = this;
+	this.constructor.__super__.commonRender.apply( this );
+
+	this.$list = $( this.listLayout );
+
+	console.log( this.$box, this.$list, this.field.options );
+
+	_.each( this.field.options, function( opt ) {
+	    console.log( opt );
+	    var $o = $( self.optionLayout ).text( opt.text );
+	    self.$list.append( $o );
+	});
+
+	this.$box.append( this.$list );
     }
   });
 

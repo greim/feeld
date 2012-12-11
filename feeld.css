@@ -302,4 +302,39 @@ textarea
 
 
 
+.fc-select {
+    width: 300px;
+    height: 30px;
+    border-radius: 2px;
+    padding: 3px;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 2px #aaa;
+    display: block;
+    position: relative;
+}
+.fc-select .fc-s-arrow {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 1em;
+    border: 1px solid red;
+}
+.fc-select .fc-s-text {
+    
+}
+.fc-select .fc-options {
+    display: none;
+    position: absolute;
+    top: 2em;
+    border: 1px solid #aaa;
+}
+.fc-options .fc-option {
+    padding: 4px;
+    list-style: none outside none;
+}
+.fc-options .fc-option:hover {
+    background-image: -webkit-linear-gradient(top, #f6f6f6, #fafafa);
+}
+
 
