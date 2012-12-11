@@ -305,15 +305,14 @@ textarea
     display: none;
 }
 .fc-select {
-    width: 300px;
-    height: 3em;
+    width: auto;
     border-radius: 2px;
-    padding: 3px;
+    padding: 0.8em;
     border: 1px solid #aaa;
     box-shadow: 0 1px 2px #aaa;
     display: block;
     position: relative;
-    background-image: -webkit-linear-gradient(top,#fcfcfc,#aaa);
+    background-image: -webkit-linear-gradient(top,#fcfcfc,#eaeaea);
 }
 .fc-select .fc-s-arrow {
     position: absolute;
@@ -321,7 +320,7 @@ textarea
     top: 0;
     height: 100%;
     width: 3em;
-    border: 1px solid red;
+    border-left: 1px solid #aaa;
 }
 .fc-select.tf-focus .fc-options {
     display: block;
@@ -334,15 +333,22 @@ textarea
     padding: 0;
     display: none;
     position: absolute;
-    top: 100%;
+    top: 1.4em;
+    left: 0;
     border: 1px solid #aaa;
 }
 .fc-options .fc-option {
-    padding: 4px;
+    padding: 0.5em;
+    font-size: 0.8em;
     list-style: none outside none;
+    border-bottom: 1px solid #aaa;
+    background-image: -webkit-linear-gradient(top,#fcfcfc,#eaeaea);
+}
+.fc-options .fc-option:last-child {
+    border-bottom: none;
 }
 .fc-options .fc-option:hover {
-    background-image: -webkit-linear-gradient(top, #f6f6f6, #aaa);
+    background-image: -webkit-linear-gradient(top, #f6f6f6, #eaeaea);
 }
 
 

@@ -236,12 +236,14 @@ SOFTWARE.
 
   var Select = Control.extend({
     initialize: function( args ) {
-      this.constructor.__super__.initialize.apply( this, args );
+	this.constructor.__super__.initialize.apply( this, args );
+	this.value = this.field.value;
+	this.currentText = $(this.field).filter(':selected').text();
     },
 
     layout: '<span class="tf fc-select">'
       + '<span class="fc-s-arrow"></span>'
-      + '<span class="fc-s-text"></span>'
+      + '<span class="fc-s-text">test value</span>'
       + '</span>',
 
     listLayout: '<ul class="fc-options"></ul>',
@@ -257,8 +259,8 @@ SOFTWARE.
 	this.constructor.__super__.commonRender.apply( this );
 
 	this.$list = $( this.listLayout );
-
-	console.log( this.$box, this.$list, this.field.options );
+	// this.$text = this.$('.fc-s-text').text( this.currentText );
+	// console.log( this.$text[0] );
 
 	_.each( this.field.options, function( opt ) {
 	    console.log( opt );
