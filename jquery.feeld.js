@@ -80,7 +80,7 @@ SOFTWARE.
 
     click: function(ev){
 	console.log( 'click' );
-      $(this.field).focus();
+      $(this.input).focus();
     },
     focus: function(ev){
 	console.log( 'focus' )
@@ -249,8 +249,6 @@ SOFTWARE.
     optionLayout: '<li class="fc-option"></li>',
 
     click: function( e ) {
-	console.log( 'select click', this, this.events );
-
       $(this.field).focus();
     },
 
@@ -269,6 +267,7 @@ SOFTWARE.
 	});
 
 	this.$box.append( this.$list );
+	this.$box.append( this.field );
     }
   });
 

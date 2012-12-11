@@ -301,32 +301,40 @@ textarea
 
 
 
-
+.fc-select select {
+    display: none;
+}
 .fc-select {
     width: 300px;
-    height: 30px;
+    height: 3em;
     border-radius: 2px;
     padding: 3px;
     border: 1px solid #aaa;
     box-shadow: 0 1px 2px #aaa;
     display: block;
     position: relative;
+    background-image: -webkit-linear-gradient(top,#fcfcfc,#aaa);
 }
 .fc-select .fc-s-arrow {
     position: absolute;
     right: 0;
     top: 0;
     height: 100%;
-    width: 1em;
+    width: 3em;
     border: 1px solid red;
+}
+.fc-select.tf-focus .fc-options {
+    display: block;
+    width: 100%;
 }
 .fc-select .fc-s-text {
     
 }
 .fc-select .fc-options {
+    padding: 0;
     display: none;
     position: absolute;
-    top: 2em;
+    top: 100%;
     border: 1px solid #aaa;
 }
 .fc-options .fc-option {
@@ -334,7 +342,7 @@ textarea
     list-style: none outside none;
 }
 .fc-options .fc-option:hover {
-    background-image: -webkit-linear-gradient(top, #f6f6f6, #fafafa);
+    background-image: -webkit-linear-gradient(top, #f6f6f6, #aaa);
 }
 
 
