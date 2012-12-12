@@ -79,51 +79,49 @@ SOFTWARE.
     },
 
     click: function(ev){
-	console.log( 'click' );
       $(this.input).focus();
     },
     focus: function(ev){
-	console.log( 'focus' )
       this.showFocus(ev);
     },
     blur: function(ev){
       this.showBlur(ev);
-    },
-    keydown: function(ev){
-      this.checkChange(ev);
     },
     change: function(ev){
       this.checkChange(ev);
     },
  
     showFocus: function(){
-      this.$box.addClass('tf-focus');
+      this.$box.addClass('fc-focus');
     },
 
     showBlur: function(){
-      this.$box.removeClass('tf-focus');
+      this.$box.removeClass('fc-focus');
     },
 
- 
+    isActive: function() {
+        return this.$box.hasClass('fc-active');
+    },
+
     commonRender: function() {
       var field = this.field;
       this.$el.html(this.layout);
-      this.$box = this.$('.tf');
+      this.$box = this.$('.fc');
  
       if (field.disabled) {
-        this.$box.addClass('tf-disabled');
+        this.$box.addClass('fc-disabled');
       } else if (field.autofocus) {
         $(field).focus();
       }
       
       if ($(field).hasClass('error')) {
-        this.$box.addClass('tf-error');
+        this.$box.addClass('fc-error');
       }
       
       if ($(field).is('[title]')) {
-        this.$box.addClass('tf-tip');
+        this.$box.addClass('fc-tip');
         var tip = $(field).attr('title');
-        var text = $('<span class="tf-tip-text"></span>');
+        var text = $('<span class="fc-tip-text"></span>');
         text.text(tip);
         text.appendTo(this.$('.tf-icon-after .tf-icon-inner'));
         if (tip.length > 25) {
@@ -135,14 +133,14 @@ SOFTWARE.
 
   var TextField = Control.extend({
     initialize: function( args ) {
-	this.constructor.__super__.initialize.call( this, args );
-	this.events = $.extend({
-	    'paste input, textarea, select': 'paste',
-	    'cut input, textarea, select': 'paste'
-	}, this.events);
+        this.constructor.__super__.initialize.call( this, args );
+        this.events = $.extend({
+            'paste input, textarea, select': 'paste',
+            'cut input, textarea, select': 'paste'
+        }, this.events);
     },
     
-    layout: '<span class="tf">'
+    layout: '<span class="fc fc-tf">'
       +'<span class="tf-inner">'
         +'<span class="tf-icon tf-icon-before">'
           +'<span class="tf-icon-inner"></span>'
@@ -167,6 +165,9 @@ SOFTWARE.
       +'</span>'
     +'</span>',
 
+      keydown: function(ev){
+        this.checkChange(ev);
+      },
     paste: function(ev){
       this.checkChange(ev);
     },
@@ -175,13 +176,12 @@ SOFTWARE.
     },
 
     showFocus: function(){
-	console.log( 'showFocus' );
-      this.$box.addClass('tf-focus');
+      this.$box.addClass('fc-focus');
     },
 
-    showBlur: function(){
-      this.$box.removeClass('tf-focus');
-    },
+//    showBlur: function(){
+//      this.$box.removeClass('fc-focus');
+//    },
 
     checkChange: function(){
       var self = this;
@@ -234,43 +234,140 @@ SOFTWARE.
     }
   });
 
-  var Select = Control.extend({
-    initialize: function( args ) {
-	this.constructor.__super__.initialize.apply( this, args );
-	this.value = this.field.value;
-	this.currentText = $(this.field).filter(':selected').text();
-    },
+    var blurTimeout;
+    var Select = Control.extend({
+        initialize: function( args ) {
+            var $opts = $('option', this.field), opt;
 
-    layout: '<span class="tf fc-select">'
-      + '<span class="fc-s-arrow"></span>'
-      + '<span class="fc-s-text">test value</span>'
-      + '</span>',
+            this.constructor.__super__.initialize.apply( this, args );
+            this.value = this.field.value;
 
-    listLayout: '<ul class="fc-options"></ul>',
-    
-    optionLayout: '<li class="fc-option"></li>',
+            opt = $opts.filter(':selected')[0] || $opts[0];
+            this.currentText = opt && $(opt).text();
+            this.selecetedIndex = this.field.selectedIndex;
+        },
 
-    click: function( e ) {
-      $(this.field).focus();
-    },
+        layout: '<span class="fc fc-sel">'
+          + '<span class="fc-sel-wrap"><span class="fc-sel-arrow"></span><span class="fc-sel-text"></span></span>'
+          + '</span>',
 
-    render: function() {
-	var self = this;
-	this.constructor.__super__.commonRender.apply( this );
+        listLayout: '<ul class="fc-sel-options"></ul>',
 
-	this.$list = $( this.listLayout );
-	// this.$text = this.$('.fc-s-text').text( this.currentText );
-	// console.log( this.$text[0] );
+        optionLayout: '<li class="fc-sel-option"></li>',
 
-	_.each( this.field.options, function( opt ) {
-	    console.log( opt );
-	    var $o = $( self.optionLayout ).text( opt.text );
-	    self.$list.append( $o );
-	});
+        click: function( e ) {
+            if ( this.$box.hasClass('fc-focus') ) {
+                clearTimeout( blurTimeout );
+            }
 
-	this.$box.append( this.$list );
-	this.$box.append( this.field );
-    }
+            $(this.field).focus();
+            this.showOptions();
+        },
+
+        showBlur: function( e ) {
+            var self = this;
+
+            e.stopPropagation();
+
+            blurTimeout = setTimeout( function() {
+                self.$box.removeClass('fc-focus');
+                self.hideOptions();
+            }, 200);
+        },
+
+        showOptions: function() {
+            var idx = this.selectedIndex = this.selectedIndex === undefined ? 0 : this.selectedIndex;
+            this.$box.addClass('fc-active');
+
+            $(this.opts).removeClass('fc-selected');
+            $(this.opts[idx]).addClass('fc-selected');
+        },
+
+        hideOptions: function() {
+            this.$box.removeClass('fc-active');
+        },
+
+        checkChange: function() {},
+
+        selectOption: function( idx ) {
+            console.log( idx );
+
+            var $opt = $(this.opts[idx]);
+            $(this.opts).removeClass('fc-selected');
+            $opt.addClass('fc-selected');
+
+            $(this.field.options).attr('selected', false)
+            $(this.field.options[idx]).attr('selected', true)
+
+            console.log( $opt );
+
+            this.currentText = $opt.text();
+            this.selectedIndex = this.field.selectedIndex = idx;
+            this.$('.fc-sel-text').text( this.currentText );
+        },
+
+        keydown: function( e ) {
+            if ( !this.isActive() && $.inArray(e.keyCode, [38, 40]) > -1 ) { // if options aren't showing, don't change the index and show the
+                this.selectedIndex = this.selectedIndex || 0;
+                this.showOptions();
+            } else if (e.keyCode == 38) { // up
+                if ( this.selectedIndex === 0 || this.selectedIndex == undefined ) {
+                    this.selectedIndex = this.opts.length - 1;
+                } else {
+                    this.selectedIndex--;
+                }
+
+                this.showOptions();
+            } else if (e.keyCode == 40) { // down
+                if ( this.selectedIndex === 0 || this.selectedIndex < this.opts.length - 1 ) {
+                    this.selectedIndex++;
+                } else if (!this.selectedIndex || this.selectedIndex == this.opts.length - 1 ) {
+                    this.selectedIndex = 0;
+                }
+
+                this.showOptions();
+            } else if (e.keyCode == 13 || e.keyCode == 39 || e.keyCode == 9) { // enter, tab
+                this.selectOption( this.selectedIndex );
+            }
+
+            var $opt = $(this.opts[this.selectedIndex]);
+            $(this.opts).removeClass('fc-selected');
+            $opt.addClass('fc-selected');
+            this.currentText = $opt.text();
+            this.$('.fc-sel-text').text( this.currentText );
+        },
+
+        render: function() {
+            var self = this;
+            this.constructor.__super__.commonRender.apply( this );
+
+            this.$list = $( this.listLayout );
+            this.opts = [];
+            this.$text = this.$('.fc-sel-text').text( this.currentText );
+
+            _.each( this.field.options, function( opt ) {
+                var $o = $( self.optionLayout ).text( opt.text );
+                self.$list.append( $o );
+                self.opts.push( $o[0] );
+            });
+
+            this.$box.append( this.$list );
+            this.$box.append( this.field );
+
+            $( '.fc-sel-option', this.$box ).on('mouseover', this, function( e ) {
+                var self = e.data;
+                $(self.opts).removeClass('fc-selected');
+            }).on('click', this, function( e ) {
+                var self = e.data;
+
+                e.stopPropagation();
+                clearTimeout( blurTimeout );
+
+                self.selectOption( $(this).index() );
+                self.hideOptions();
+                self.field.focus();
+            });
+        }
   });
 
 })(jQuery);
