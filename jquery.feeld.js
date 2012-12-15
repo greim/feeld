@@ -31,6 +31,7 @@ SOFTWARE.
     var $input = $self.find('input[type="text"],input[type="password"]');
     var $textarea = $self.find('textarea');
     var $select = $self.find('select');
+    var $tooltip = $self.find('.tooltip');
 
     $input.each(function(){
       var data = $(this).attr('data-options') || '{}';
@@ -53,6 +54,14 @@ SOFTWARE.
       data = JSON.parse(data);
       data.field = this;
       var v = new Select(data);
+      v.render();
+    });
+
+    $tooltip.each( function() {
+      var data = $(this).attr('data-options') || '{}';
+      data = JSON.parse(data);
+      data.field = this;
+      var v = new Tooltip(data);
       v.render();
     });
 
@@ -179,10 +188,6 @@ SOFTWARE.
       this.$box.addClass('fc-focus');
     },
 
-//    showBlur: function(){
-//      this.$box.removeClass('fc-focus');
-//    },
-
     checkChange: function(){
       var self = this;
       setTimeout(function(){
@@ -234,10 +239,14 @@ SOFTWARE.
     }
   });
 
-    var blurTimeout;
     var Select = Control.extend({
         initialize: function( args ) {
             var $opts = $('option', this.field), opt;
+
+            this.events = $.extend({
+                'click .fc-sel-option': 'optionClick',
+                'mouseover .fc-sel-option': 'optionHover'
+            }, this.events);
 
             this.constructor.__super__.initialize.apply( this, args );
             this.value = this.field.value;
@@ -257,7 +266,7 @@ SOFTWARE.
 
         click: function( e ) {
             if ( this.$box.hasClass('fc-focus') ) {
-                clearTimeout( blurTimeout );
+                clearTimeout( this.blurTimeout );
             }
 
             $(this.field).focus();
@@ -269,7 +278,7 @@ SOFTWARE.
 
             e.stopPropagation();
 
-            blurTimeout = setTimeout( function() {
+            this.blurTimeout = setTimeout( function() {
                 self.$box.removeClass('fc-focus');
                 self.hideOptions();
             }, 200);
@@ -287,26 +296,42 @@ SOFTWARE.
             this.$box.removeClass('fc-active');
         },
 
-        checkChange: function() {},
+        checkChange: function() {
+            var val = $("option", this.field).filter(':selected').val();
+
+            console.log( 'checkChange', val );
+
+            if ( this.value != val ) {
+                console.log( 'triggered' );
+                this.trigger('change', {
+                    oldValue: self.currentValue,
+                    newValue: val
+                });
+                this.value = val;
+            }
+        },
 
         selectOption: function( idx ) {
-            console.log( idx );
+            var $displayOpt = $(this.opts[idx]),
+                $valueOpts = $(this.field.options),
+                $valueOpt = $(this.field.options[idx]);
 
-            var $opt = $(this.opts[idx]);
             $(this.opts).removeClass('fc-selected');
-            $opt.addClass('fc-selected');
+            $displayOpt.addClass('fc-selected');
 
-            $(this.field.options).attr('selected', false)
-            $(this.field.options[idx]).attr('selected', true)
+            $valueOpts.attr('selected', false);
+            $valueOpt.attr('selected', true);
 
-            console.log( $opt );
-
-            this.currentText = $opt.text();
+            this.currentText = $valueOpt.text();
             this.selectedIndex = this.field.selectedIndex = idx;
             this.$('.fc-sel-text').text( this.currentText );
+
+            this.checkChange();
         },
 
         keydown: function( e ) {
+            // TODO: chrome loses focus of the feeld input after up/down arrow and no longer fires events, ff ok
+//            console.log('before', e.keyCode, this.selectedIndex, this.opts );
             if ( !this.isActive() && $.inArray(e.keyCode, [38, 40]) > -1 ) { // if options aren't showing, don't change the index and show the
                 this.selectedIndex = this.selectedIndex || 0;
                 this.showOptions();
@@ -330,11 +355,26 @@ SOFTWARE.
                 this.selectOption( this.selectedIndex );
             }
 
+//            console.log('after', e.keyCode, this.selectedIndex, this.opts );
             var $opt = $(this.opts[this.selectedIndex]);
             $(this.opts).removeClass('fc-selected');
             $opt.addClass('fc-selected');
             this.currentText = $opt.text();
             this.$('.fc-sel-text').text( this.currentText );
+        },
+
+        optionHover: function() {
+            $(this.opts).removeClass('fc-selected');
+        },
+
+        optionClick: function( e ) {
+            e.stopPropagation();
+            clearTimeout( this.blurTimeout );
+
+            this.selectOption( $(e.currentTarget).index() );
+            this.hideOptions();
+            this.field.focus();
+//            this.checkChange();
         },
 
         render: function() {
@@ -353,22 +393,31 @@ SOFTWARE.
 
             this.$box.append( this.$list );
             this.$box.append( this.field );
-
-            $( '.fc-sel-option', this.$box ).on('mouseover', this, function( e ) {
-                var self = e.data;
-                $(self.opts).removeClass('fc-selected');
-            }).on('click', this, function( e ) {
-                var self = e.data;
-
-                e.stopPropagation();
-                clearTimeout( blurTimeout );
-
-                self.selectOption( $(this).index() );
-                self.hideOptions();
-                self.field.focus();
-            });
         }
   });
+
+    var Tooltip = Backbone.View.extend({
+        initialize: function(){
+            console.log( 'init' );
+            this.field = this.options.field;
+            $(this.field).replaceWith(this.el);
+            this.customHtml = $(this.field).html();
+        },
+    
+        layout: '<span class="fc-tip fc-tooltip">'
+                + '<span class="fc-icon"></span>'
+                + '<span class="fc-tip-text"></span>'
+            +'</span>',
+
+        render: function() {
+            this.$el.html(this.layout);
+            this.$el.find('.fc-tip-text').html(this.customHtml);
+            if (this.customHtml.length > 25) {
+                this.$el.addClass('fc-bigtip');
+            }
+        }
+    });
+
 
 })(jQuery);
 

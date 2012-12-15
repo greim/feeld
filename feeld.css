@@ -29,7 +29,7 @@ text field styles
 	padding:.6em 0;
 	vertical-align:middle;
 }
-.tf-icon-inner{
+.tf-icon-inner {
 	display:block;
 	min-width:.7em;
 }
@@ -185,21 +185,32 @@ tip
 	width:2.2em;
 	position: relative;
 }
-.fc-tip .tf-icon-after .tf-icon-inner:before{
+.fc-tip .tf-icon-after .tf-icon-inner:before {
 	content:'';
 	position: absolute;
 	top:-1em;
 	left:0;
 	right:0;
 	bottom:-1em;
-	opacity:.3;
-	background: transparent
-		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAZ1JREFUeNrEljFugzAUhk3VC0Tqhlg4QaQsZawEOUFZM6LeIFeAI8ANAmNGInVkCVFyAFg6RaqSE0TuexamTgTGtI37pJ84xPaXZz/7PYNSSnTZIz4Mw5D1sUAvIAc0BdmgJ9AnqAbtQQXoHfTRNwlzSuKZCVqCdthXQbumvzkWNgetFSG3WjfjlWCvoMMPQVyHZh4pbP4HIBE474OZv1g62ZKaXbClbKDv+zTPc8rtdDrRNE1pEARDwOUtzJJFXRiGVGZxHA9FqSXCFn2dbdtuJ62qin3H967rMu+4oecS4AI5D80SOn2HDSZp21EUkbquWXuz2ZAkSdrf4E/ILganvUGam6HTsiwjZVmyNv/sApzPZxls+h2ShBzHRNlkMrnax+12y95JxhzFPbuogmaz2dVeYUQOgFAXEabsGXrBTSHsOz0rVGHc8MyNWPoCOTxAME08q+SkgXTUZ3sxGtGzN5VR4FHb9jxPFVaI0Wip5i3RRuQ5SzzUmGFXd6oGVm0G/69bX2s+056ptdcgd6uuDPbQVDcaOiviLwEGALT1dd4QMUwTAAAAAElFTkSuQmCC)
-		no-repeat
-		50% 50%;
-	background-size:1.3em;
 }
-.fc-tip-text{
+.fc-tooltip .fc-icon,
+.fc-tip .tf-icon-after .tf-icon-inner:before {
+    opacity:.3;
+   	background: transparent
+   		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAZ1JREFUeNrEljFugzAUhk3VC0Tqhlg4QaQsZawEOUFZM6LeIFeAI8ANAmNGInVkCVFyAFg6RaqSE0TuexamTgTGtI37pJ84xPaXZz/7PYNSSnTZIz4Mw5D1sUAvIAc0BdmgJ9AnqAbtQQXoHfTRNwlzSuKZCVqCdthXQbumvzkWNgetFSG3WjfjlWCvoMMPQVyHZh4pbP4HIBE474OZv1g62ZKaXbClbKDv+zTPc8rtdDrRNE1pEARDwOUtzJJFXRiGVGZxHA9FqSXCFn2dbdtuJ62qin3H967rMu+4oecS4AI5D80SOn2HDSZp21EUkbquWXuz2ZAkSdrf4E/ILganvUGam6HTsiwjZVmyNv/sApzPZxls+h2ShBzHRNlkMrnax+12y95JxhzFPbuogmaz2dVeYUQOgFAXEabsGXrBTSHsOz0rVGHc8MyNWPoCOTxAME08q+SkgXTUZ3sxGtGzN5VR4FHb9jxPFVaI0Wip5i3RRuQ5SzzUmGFXd6oGVm0G/69bX2s+056ptdcgd6uuDPbQVDcaOiviLwEGALT1dd4QMUwTAAAAAElFTkSuQmCC)
+   		no-repeat
+   		50% 50%;
+   	background-size:1.3em;
+}
+.fc-tooltip {
+    position: relative;
+}
+.fc-icon {
+    display: inline-block;
+    height: 1.3em;
+    width: 1.3em;
+}
+.fc-tip-text {
 	position: absolute;
 	background:#f6f6f6;
     background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 100%);
@@ -208,8 +219,6 @@ tip
 	color:#999;
 	padding:.4em .6em;
 	border-radius:.2em;
-	right:-.2em;
-	bottom:100%;
 	margin-bottom:1.7em;
 	box-shadow:0 0 0 .1em rgba(0,0,0,0.1), .1em .1em .3em .1em rgba(0,0,0,0.1);
 	line-height:1.3;
@@ -217,8 +226,15 @@ tip
 	text-shadow:0 .1em 0 #fff;
 	text-align:center;
 	display:none;
+    z-index: 10;
+    bottom: 50%;
 }
-.fc-tip .tf-icon-after:hover .fc-tip-text{
+.tf-icon-after .fc-tip-text {
+    bottom:100%;
+    right:-.2em;
+}
+.fc-tip .tf-icon:hover .fc-tip-text,
+.fc-tooltip:hover .fc-tip-text {
 	display:block;
 }
 .fc-tip-text:after{
@@ -232,16 +248,22 @@ tip
 		0 0;
 	background-size:1.2em;
 	top:100%;
-	right:.8em;
+    right:47%;
 }
-.tf-bigtip .fc-tip-text{
+.tf-icon-after .fc-tip-text:after {
+    right:.8em;
+}
+.fc-bigtip .fc-tip-text,
+.tf-bigtip .fc-tip-text {
 	white-space:normal;
 	min-width:14em;
 	padding:.7em .9em;
 }
+.fc-bigtip .fc-tip-text {
+    left: -7em;
+}
 
-/*
--------------------------------------------------------------------
+/* -------------------------------------------------------------------
 textarea
 */
 
@@ -301,6 +323,9 @@ textarea
 }
 
 
+/* -------------------------------------------------------------------
+select
+*/
 
 
 .fc-sel select {
@@ -321,7 +346,7 @@ textarea
     position: relative;
     background-image: -webkit-linear-gradient(top,#fcfcfc,#eaeaea);
     background-image: -moz-linear-gradient(top,#fcfcfc,#eaeaea);
-    z-index: 1;
+    z-index: 2;
 }
 .fc-active .fc-sel-wrap {
     border-bottom: 1px solid #aaa;
@@ -347,7 +372,7 @@ textarea
     margin: 0;
     display: none;
     position: absolute;
-    z-index: 0;
+    z-index: 1;
     top: 90%;
     left: -1px;
     border: 1px solid #aaa;
@@ -362,8 +387,6 @@ textarea
     font-size: 0.9em;
     list-style: none outside none;
     border-bottom: 1px solid #aaa;
-    /*background-image: -webkit-linear-gradient(top,#fcfcfc,#eaeaea);*/
-    /*background-image: -moz-linear-gradient(top,#fcfcfc,#eaeaea);*/
 }
 .fc-sel-options .fc-sel-option:last-child {
     border-bottom: none;
@@ -373,4 +396,3 @@ textarea
     background-image: -webkit-linear-gradient(top, #f6f6f6, #e0e0e0);
     background-image: -moz-linear-gradient(top, #f6f6f6, #e0e0e0);
 }
-

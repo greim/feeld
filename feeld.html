@@ -17,6 +17,11 @@ body{
 	font-size:14px;
     margin-bottom: 300px;
 }
+.column {
+    float: left;
+    margin-left: 40px;
+    width: 25em;
+}
 .foo-label{
 	display:block;
 	color:#888;
@@ -24,8 +29,9 @@ body{
 }
 </style>
 
-<form style="width:25em" id="form">
+<form id="form">
 
+<div class='column'> 
 <h2>Text fields</h2>
 
 <p><label><span class="foo-label">Field label</span> <input autofocus placeholder="Enter a value..." type="text"></label></p>
@@ -38,7 +44,20 @@ body{
 <p><label><span class="foo-label">Field label</span> <input disabled type="text" value="some text" maxlength="40"></label></p>
 <p><label><span class="foo-label">Field label</span> <input title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet ornare urna. Sed faucibus magna at elit condimentum congue" type="text" value="some text"></label></p>
 <p><label><span class="foo-label">Field label</span> <input class="search" placeholder="Search" type="text"></label></p>
+</div>
 
+<div class='column'>
+<h2>Text areas</h2>
+
+<p><label><span class="foo-label">Textarea</span><textarea>Here is some text</textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea placeholder="Enter some text..."></textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea maxlength="400" placeholder="Enter some text..."></textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea disabled maxlength="400" placeholder="Enter some text..."></textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea disabled maxlength="400" placeholder="Enter some text...">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet ornare urna. Sed faucibus magna at elit condimentum congue</textarea></label></p>
+<p><label><span class="foo-label">Textarea</span><textarea maxlength="400" placeholder="Enter some text..." class="error"></textarea></label></p>
+</div>
+
+<div class='column'>
 <h2>Check boxes</h2>
 
 <p>
@@ -53,20 +72,19 @@ body{
 <label><input type="radio" name="bar" value="z"> thing 3</label>
 </p>
 
-<h2>Text areas</h2>
-
-<p><label><span class="foo-label">Textarea</span><textarea>Here is some text</textarea></label></p>
-<p><label><span class="foo-label">Textarea</span><textarea placeholder="Enter some text..."></textarea></label></p>
-<p><label><span class="foo-label">Textarea</span><textarea maxlength="400" placeholder="Enter some text..."></textarea></label></p>
-<p><label><span class="foo-label">Textarea</span><textarea disabled maxlength="400" placeholder="Enter some text..."></textarea></label></p>
-<p><label><span class="foo-label">Textarea</span><textarea disabled maxlength="400" placeholder="Enter some text...">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet ornare urna. Sed faucibus magna at elit condimentum congue</textarea></label></p>
-<p><label><span class="foo-label">Textarea</span><textarea maxlength="400" placeholder="Enter some text..." class="error"></textarea></label></p>
-
+<h2>Select controls</h2>
 <select>
-    <option value=''>Value 1</option>
-    <option value=''>Value 2</option>
-    <option value=''>Value 3</option>
+    <option value='1'>Value 1</option>
+    <option value='2'>Value 2</option>
+    <option value='3'>Value 3</option>
 </select>
+
+<h2>Info Widgets</h2>
+<span class='tooltip'><div><h3>Custom Header</h3><p>Custom paragraph</p></div></span>
+
+
+</div>
+
 
 </form>
 
