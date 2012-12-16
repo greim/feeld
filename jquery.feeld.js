@@ -26,43 +26,22 @@ SOFTWARE.
       // nothing here yet
     }, opts);
 
-    var $self = $(this);
+    var $self = $(this),
+        selectors = [
+            { className: TextField, selector: 'input[type="text"],input[type="password"],textarea' },
+            { className: Select, selector: 'select' },
+            { className: Tooltip, selector: '.tooltip' },
+            { className: Checkbox, selector: 'input[type="checkbox"]' }
+        ];
 
-    var $input = $self.find('input[type="text"],input[type="password"]');
-    var $textarea = $self.find('textarea');
-    var $select = $self.find('select');
-    var $tooltip = $self.find('.tooltip');
-
-    $input.each(function(){
-      var data = $(this).attr('data-options') || '{}';
-      data = JSON.parse(data);
-      data.field = this;
-      var v = new TextField(data);
-      v.render();
-    });
-
-    $textarea.each(function(){
-      var data = $(this).attr('data-options') || '{}';
-      data = JSON.parse(data);
-      data.field = this;
-      var v = new TextField(data);
-      v.render();
-    });
-
-    $select.each( function() {
-      var data = $(this).attr('data-options') || '{}';
-      data = JSON.parse(data);
-      data.field = this;
-      var v = new Select(data);
-      v.render();
-    });
-
-    $tooltip.each( function() {
-      var data = $(this).attr('data-options') || '{}';
-      data = JSON.parse(data);
-      data.field = this;
-      var v = new Tooltip(data);
-      v.render();
+    _.each(selectors, function( o ) {
+        $self.find(o.selector).each(function(){
+          var data = $(this).attr('data-options') || '{}';
+          data = JSON.parse(data);
+          data.field = this;
+          var v = new o.className(data);
+          v.render();
+        });
     });
 
     return this;
@@ -79,17 +58,15 @@ SOFTWARE.
       $(this.field).replaceWith(this.el);
     },
     events: {
-      'click': 'click',
-
+      'click input, textarea': 'click',
       'focus input, textarea, select': 'focus',
       'blur input, textarea, select': 'blur',
-      'keydown input, textarea, select': 'keydown',
       'change input, textarea, select': 'change'
     },
 
-    click: function(ev){
-      $(this.input).focus();
-    },
+      click: function(ev){
+          console.log( 'super click', this.input );
+      },
     focus: function(ev){
       this.showFocus(ev);
     },
@@ -126,7 +103,8 @@ SOFTWARE.
       if ($(field).hasClass('error')) {
         this.$box.addClass('fc-error');
       }
-      
+
+        // TODO: consider moving this section to TextField, doesn't apply to textboxes etc?
       if ($(field).is('[title]')) {
         this.$box.addClass('fc-tip');
         var tip = $(field).attr('title');
@@ -144,11 +122,16 @@ SOFTWARE.
     initialize: function( args ) {
         this.constructor.__super__.initialize.call( this, args );
         this.events = $.extend({
-            'paste input, textarea, select': 'paste',
-            'cut input, textarea, select': 'paste'
+            'keydown input, textarea': 'keydown',
+            'paste input, textarea': 'paste',
+            'cut input, textarea': 'paste'
         }, this.events);
     },
     
+      click: function(ev){
+          console.log( 'textfield click', this.input );
+          $(this.input).focus();
+      },
     layout: '<span class="fc fc-tf">'
       +'<span class="tf-inner">'
         +'<span class="tf-icon tf-icon-before">'
@@ -243,12 +226,19 @@ SOFTWARE.
         initialize: function( args ) {
             var $opts = $('option', this.field), opt;
 
-            this.events = $.extend({
-                'click .fc-sel-option': 'optionClick',
-                'mouseover .fc-sel-option': 'optionHover'
-            }, this.events);
-
             this.constructor.__super__.initialize.apply( this, args );
+
+            console.log( Control.prototype.events );
+
+            this.events = $.extend({
+                'keydown select': 'keydown',
+                'click .fc-sel-option': 'optionClick',
+                'click .fc-sel': 'click',
+                'mouseover .fc-sel-option': 'optionHover'
+            }, Control.prototype.events);
+
+            console.log( this.events );
+
             this.value = this.field.value;
 
             opt = $opts.filter(':selected')[0] || $opts[0];
@@ -312,6 +302,8 @@ SOFTWARE.
         },
 
         selectOption: function( idx ) {
+            idx = idx || 0;
+
             var $displayOpt = $(this.opts[idx]),
                 $valueOpts = $(this.field.options),
                 $valueOpt = $(this.field.options[idx]);
@@ -396,7 +388,37 @@ SOFTWARE.
         }
   });
 
+    var Checkbox = Control.extend({
+        tagName: 'span',
+        layout: '<span class="fc-checkbox fc"></span>',
+        initialize: function( args ) {
+            this.constructor.__super__.initialize.apply( this, args );
+            this.events = $.extend({
+            }, this.events);
+        },
+        click: function( e ) {
+            console.log( 'checkbox click', this.field.checked );
+        },
+        checkChange: function() {
+            console.log( 'checkbox change', this.field.checked );
+
+            this.field.checked ? this.$box.addClass('fc-checked') : this.$box.removeClass('fc-checked');
+            this.trigger('change');
+        },
+//        layout: '<span class="fc-checkbox"></span>',
+        render: function() {
+            this.constructor.__super__.commonRender.apply( this );
+
+            if ( $(this.field).attr('checked') ) {
+                this.$box.addClass('fc-checked');
+            }
+
+            this.$box.append( this.field );
+        }
+    });
+
     var Tooltip = Backbone.View.extend({
+
         initialize: function(){
             console.log( 'init' );
             this.field = this.options.field;
