@@ -220,7 +220,7 @@ tip
 	padding:.4em .6em;
 	border-radius:.2em;
 	margin-bottom:1.7em;
-	box-shadow:0 0 0 .1em rgba(0,0,0,0.1), .1em .1em .3em .1em rgba(0,0,0,0.1);
+	box-shadow:0 0 0 .1em rgba(0,0,0,0.1), .1em .1em .3em .1em rgba(0,0,0,0.1), 0 1.2em .4em -0.8em rgba(0, 0, 0, 0.1);
 	line-height:1.3;
 	font-size:.9em;
 	text-shadow:0 .1em 0 #fff;
@@ -403,7 +403,7 @@ select
  Checkboxes
 **********************************************/
 
-.fc input[type="checkbox"] {
+.fc-box input[type="checkbox"] {
     position: absolute;
     top: 0;
     left: 500px;
@@ -426,5 +426,69 @@ select
     display: block;
 }
 .fc-checkbox.fc-disabled {
+    opacity: 0.5;
+}
+
+
+/**********************************************
+ Switches
+**********************************************/
+
+.fc-switch {
+    border-radius: 1em;
+    display: inline-block;
+    height: 1.5em;
+    width: 2.5em;
+    margin: 0 0.5em;
+    position: relative;
+}
+.fc-switch > span {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    -webkit-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+}
+.fc-switch-toggle, .fc-switch-right {
+    box-shadow: 0 0 0 .1em rgba(0,0,0,0.2);
+}
+
+.fc-switch .fc-switch-toggle {
+    border-radius: 50%;
+    width: 1.5em;
+    left: 0;
+    z-index: 2;
+    background-color: #FFF;
+    box-shadow: 0 0 0 .1em rgba(0,0,0,0.2), inset -0.4em -1em 0.5em -0.8em rgba(0, 0, 0, 0.3);
+}
+.fc-switch-left {
+    right: 1em;
+    left: 0;
+}
+.fc-switch-right {
+    left: 0;
+    right: 0;
+}
+.fc-switch-left, .fc-switch-right {
+    border-radius: 1em;
+    height: 1.5em;
+    box-shadow: inset 0 5px 8px rgba(0,0,0,0.2);
+}
+.fc-switch-left {
+    background-color: #A3D238;
+}
+.fc-checked .fc-switch-toggle {
+    left: 1em;
+    right: 0;
+}
+.fc-checked .fc-switch-left {
+    right: 0;
+}
+.fc-checked .fc-switch-right {
+    left: 0;
+}
+.fc-switch.fc-disabled {
     opacity: 0.5;
 }

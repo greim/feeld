@@ -31,7 +31,8 @@ SOFTWARE.
             { className: TextField, selector: 'input[type="text"],input[type="password"],textarea' },
             { className: Select, selector: 'select' },
             { className: Tooltip, selector: '.tooltip' },
-            { className: Checkbox, selector: 'input[type="checkbox"]' }
+            { className: Checkbox, selector: 'input[type="checkbox"]:not(.fc-switch)' },
+            { className: Switch, selector: 'input[type="checkbox"].fc-switch' }
         ];
 
     _.each(selectors, function( o ) {
@@ -68,6 +69,7 @@ SOFTWARE.
 //          console.log( 'super click', this.input );
       },
     focus: function(ev){
+//        console.log( 'super focus', this.input );
       this.showFocus(ev);
     },
     blur: function(ev){
@@ -92,7 +94,7 @@ SOFTWARE.
     commonRender: function() {
       var field = this.field;
       this.$el.html(this.layout);
-      this.$box = this.$('.fc');
+      this.$box = this.$('.fc-box');
  
       if (field.disabled) {
         this.$box.addClass('fc-disabled');
@@ -132,7 +134,7 @@ SOFTWARE.
 //          console.log( 'textfield click', this.input );
           $(this.input).focus();
       },
-    layout: '<span class="fc fc-tf">'
+    layout: '<span class="fc fc-tf fc-box">'
       +'<span class="tf-inner">'
         +'<span class="tf-icon tf-icon-before">'
           +'<span class="tf-icon-inner"></span>'
@@ -242,7 +244,7 @@ SOFTWARE.
             this.selecetedIndex = this.field.selectedIndex;
         },
 
-        layout: '<span class="fc fc-sel">'
+        layout: '<span class="fc fc-sel fc-box">'
           + '<span class="fc-sel-wrap"><span class="fc-sel-arrow"></span><span class="fc-sel-text"></span></span>'
           + '</span>',
 
@@ -384,14 +386,9 @@ SOFTWARE.
 
     var Checkbox = Control.extend({
         tagName: 'span',
-        layout: '<span class="fc-checkbox fc"><span class="fc-checkmark"></span></span>',
-        initialize: function( args ) {
-            this.constructor.__super__.initialize.apply( this, args );
-            this.events = $.extend({
-            }, this.events);
-        },
-        click: function( e ) {
-//            console.log( 'checkbox click', this.field.checked );
+        layout: '<span class="fc-checkbox fc-box fc"><span class="fc-checkmark"></span></span>',
+        focus: function( e ) {
+            this.showFocus();
         },
         checkChange: function() {
 //            console.log( 'checkbox change', this.field.checked );
@@ -399,7 +396,6 @@ SOFTWARE.
             this.field.checked ? this.$box.addClass('fc-checked') : this.$box.removeClass('fc-checked');
             this.trigger('change');
         },
-//        layout: '<span class="fc-checkbox"></span>',
         render: function() {
             this.constructor.__super__.commonRender.apply( this );
 
@@ -411,10 +407,16 @@ SOFTWARE.
         }
     });
 
+    var Switch = Checkbox.extend({
+        tagName: 'span',
+        layout: '<span class="fc-switch fc-box">' +
+            '<span class="fc-switch-left"></span><span class="fc-switch-toggle"></span><span class="fc-switch-right"></span>' +
+            '</span>'
+    });
+
     var Tooltip = Backbone.View.extend({
 
         initialize: function(){
-//            console.log( 'init' );
             this.field = this.options.field;
             $(this.field).replaceWith(this.el);
             this.customHtml = $(this.field).html();
