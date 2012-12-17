@@ -397,6 +397,8 @@ select
     background-image: -moz-linear-gradient(top, #f6f6f6, #e0e0e0);
 }
 
+
+
 /**********************************************
  Checkboxes
 **********************************************/
@@ -410,8 +412,19 @@ select
     display: inline-block;
     height: 1.5em;
     width: 1.5em;
-    /*border: 1px solid red;*/
+    margin: 0 0.5em;
 }
-.fc-checked {
-    background-color: #000;
+.fc-checkmark {
+    background: url(checkmark.png) no-repeat center center transparent;
+    background-size: 18px 18px;
+    height: 100%;
+    width: 100%;
+    display: block;
+    display: none;
+}
+.fc-checked .fc-checkmark {
+    display: block;
+}
+.fc-checkbox.fc-disabled {
+    opacity: 0.5;
 }

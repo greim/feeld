@@ -65,7 +65,7 @@ SOFTWARE.
     },
 
       click: function(ev){
-          console.log( 'super click', this.input );
+//          console.log( 'super click', this.input );
       },
     focus: function(ev){
       this.showFocus(ev);
@@ -129,7 +129,7 @@ SOFTWARE.
     },
     
       click: function(ev){
-          console.log( 'textfield click', this.input );
+//          console.log( 'textfield click', this.input );
           $(this.input).focus();
       },
     layout: '<span class="fc fc-tf">'
@@ -228,16 +228,12 @@ SOFTWARE.
 
             this.constructor.__super__.initialize.apply( this, args );
 
-            console.log( Control.prototype.events );
-
             this.events = $.extend({
                 'keydown select': 'keydown',
                 'click .fc-sel-option': 'optionClick',
                 'click .fc-sel': 'click',
                 'mouseover .fc-sel-option': 'optionHover'
             }, Control.prototype.events);
-
-            console.log( this.events );
 
             this.value = this.field.value;
 
@@ -289,10 +285,8 @@ SOFTWARE.
         checkChange: function() {
             var val = $("option", this.field).filter(':selected').val();
 
-            console.log( 'checkChange', val );
-
             if ( this.value != val ) {
-                console.log( 'triggered' );
+//                console.log( 'triggered' );
                 this.trigger('change', {
                     oldValue: self.currentValue,
                     newValue: val
@@ -390,17 +384,17 @@ SOFTWARE.
 
     var Checkbox = Control.extend({
         tagName: 'span',
-        layout: '<span class="fc-checkbox fc"></span>',
+        layout: '<span class="fc-checkbox fc"><span class="fc-checkmark"></span></span>',
         initialize: function( args ) {
             this.constructor.__super__.initialize.apply( this, args );
             this.events = $.extend({
             }, this.events);
         },
         click: function( e ) {
-            console.log( 'checkbox click', this.field.checked );
+//            console.log( 'checkbox click', this.field.checked );
         },
         checkChange: function() {
-            console.log( 'checkbox change', this.field.checked );
+//            console.log( 'checkbox change', this.field.checked );
 
             this.field.checked ? this.$box.addClass('fc-checked') : this.$box.removeClass('fc-checked');
             this.trigger('change');
@@ -420,7 +414,7 @@ SOFTWARE.
     var Tooltip = Backbone.View.extend({
 
         initialize: function(){
-            console.log( 'init' );
+//            console.log( 'init' );
             this.field = this.options.field;
             $(this.field).replaceWith(this.el);
             this.customHtml = $(this.field).html();
