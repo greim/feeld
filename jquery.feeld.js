@@ -22,26 +22,34 @@ SOFTWARE.
 
 (function($){
   $.fn.feeld = function(opts){
+      /*
+       * Supported options
+       * selectors: { type, selector } restricts converting form elements to only these selectors
+       * excludes: (string) selectors to exclude
+       */
     opts = $.extend({
       // nothing here yet
     }, opts);
 
     var $self = $(this),
-        selectors = [
-            { className: TextField, selector: 'input[type="text"],input[type="password"],textarea' },
-            { className: Select, selector: 'select' },
-            { className: Tooltip, selector: '.tooltip' },
-            { className: Checkbox, selector: 'input[type="checkbox"]:not(.fc-switch)' },
-            { className: Switch, selector: 'input[type="checkbox"].fc-switch' }
-        ];
+        selectors = opts.selectors || [
+            { type: 'TextField', selector: 'input[type="text"],input[type="password"],textarea' },
+            { type: 'Select', selector: 'select' },
+            { type: 'Tooltip', selector: '.tooltip' },
+            { type: 'Checkbox', selector: 'input[type="checkbox"]:not(.fc-switch)' },
+            { type: 'Switch', selector: 'input[type="checkbox"].fc-switch' }
+        ],
+        excludes = opts.excludes || '';
 
     _.each(selectors, function( o ) {
-        $self.find(o.selector).each(function(){
-          var data = $(this).attr('data-options') || '{}';
+        $self.find(o.selector).not(excludes).each(function(){
+          var data = $(this).attr('data-options') || '{}', type = eval(o.type);
           data = JSON.parse(data);
           data.field = this;
-          var v = new o.className(data);
-          v.render();
+          if ( typeof type == 'function' ) {
+              var v = new type(data);
+              v.render();
+          }
         });
     });
 
@@ -226,8 +234,6 @@ SOFTWARE.
 
     var Select = Control.extend({
         initialize: function( args ) {
-            var $opts = $('option', this.field), opt;
-
             this.constructor.__super__.initialize.apply( this, args );
 
             this.events = $.extend({
@@ -236,12 +242,6 @@ SOFTWARE.
                 'click .fc-sel': 'click',
                 'mouseover .fc-sel-option': 'optionHover'
             }, Control.prototype.events);
-
-            this.value = this.field.value;
-
-            opt = $opts.filter(':selected')[0] || $opts[0];
-            this.currentText = opt && $(opt).text();
-            this.selecetedIndex = this.field.selectedIndex;
         },
 
         layout: '<span class="fc fc-sel fc-box">'
@@ -357,6 +357,7 @@ SOFTWARE.
 
         optionClick: function( e ) {
             e.stopPropagation();
+            e.preventDefault();
             clearTimeout( this.blurTimeout );
 
             this.selectOption( $(e.currentTarget).index() );
@@ -366,8 +367,14 @@ SOFTWARE.
         },
 
         render: function() {
-            var self = this;
+            var self = this, $opts = $('option', this.field), opt;
             this.constructor.__super__.commonRender.apply( this );
+
+            this.value = this.field.value;
+
+            opt = $opts.filter(':selected')[0] || $opts[0];
+            this.currentText = opt && $(opt).text();
+            this.selectedIndex = this.field.selectedIndex;
 
             this.$list = $( this.listLayout );
             this.opts = [];
@@ -438,7 +445,5 @@ SOFTWARE.
 
 
 })(jQuery);
-
-
 
 

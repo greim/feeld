@@ -11,11 +11,12 @@ text field styles
     background-image:         linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0) 60%);
 	display:block;
 	line-height:1;
-	box-shadow:0 0 0 .1em rgba(0,0,0,0.2), .05em .1em .5em -.1em rgba(0,0,0,0.2) inset, 0 0 .2em .1em rgba(0,0,0,0.1);
+	box-shadow:0 0 0 1px rgba(0,0,0,0.2), .05em 1px .5em -1px rgba(0,0,0,0.2) inset, 0 0 .2em 1px rgba(0,0,0,0.1);
 	border-radius:.15em;
 	white-space:nowrap;
-	text-shadow:0 .1em .2em rgba(0,0,0,0.1);
+	text-shadow:0 1px .2em rgba(0,0,0,0.1);
 	position: relative;
+    cursor: pointer;
 }
 .fc-tf {
     cursor:text;
@@ -61,7 +62,7 @@ text field styles
 	display:block;
 	width:100%;
 	font:inherit;
-	text-shadow:0 .1em .25em rgba(0,0,0,0.2);
+	text-shadow:0 1px .25em rgba(0,0,0,0.2);
 	color:inherit;
 }
 .tf-counter{
@@ -82,7 +83,7 @@ disabled
 	visibility:hidden;
 }
 .tf-field-inner > input:disabled{
-	text-shadow:0 .1em 0 #fff;
+	text-shadow:0 1px 0 #fff;
 }
 .fc.fc-disabled{
 	background-color:#fafafa;
@@ -90,8 +91,8 @@ disabled
     background-image:    -moz-linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0) 100%);
     background-image:         linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0) 100%);
 	color:#bbb;
-	box-shadow:0 0 0 .1em rgba(0,0,0,0.2), .1em .1em 0 rgba(255,255,255,0.5) inset;
-	text-shadow:0 .1em 0 #fff;
+	box-shadow:0 0 0 1px rgba(0,0,0,0.2), 1px 1px 0 rgba(255,255,255,0.5) inset;
+	text-shadow:0 1px 0 #fff;
 }
 
 /*
@@ -125,7 +126,7 @@ error
 */
 
 .fc-error{
-	box-shadow:0 0 0 .1em #c00, 0 0 .25em .1em rgba(255,0,0,0.3), 0 0 .25em rgba(255,0,0,0.3) inset;
+	box-shadow:0 0 0 1px #c00, 0 0 .25em 1px rgba(255,0,0,0.3), 0 0 .25em rgba(255,0,0,0.3) inset;
 }
 .fc-error .tf-icon-after .tf-icon-inner{
 	width:2.2em;
@@ -170,7 +171,7 @@ search
 		url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAdCAYAAABWk2cPAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAYBJREFUeNrEl7Fqw0AMhutQ6FIy+AXi2abePaWQNY/QZ/Bc6FA/RvsC7QMka6DQgIdshnTJlHfw7kqglIuQfIqTSwV/CjpJX09cdJeo67qba9stfkRRpK1noBmoAOWgCfn3oAZUg1agrZSsbkhZSEAVaIchHu0oNpFqS5Kgj6CFAca1oNyToZi0HgA8aO2CLdBE2eEG9AqagmLSlHwbZceJFVoJBd5AqZoMaxTD8yoLNBMODRYba4kOeCyAsVbmg5ZCS1MfkO2Yt7rU4kfU2oKd4CUs/li/7BS7ZO5Ciz9Ac+b/GjBoeE7e91/in5a1Jra21mlxzGq0vvZe1UbOLHXtYUAtnrP3QRthFJ5qPKfxQWvmn8PNk1ppFDtn7tp3kIIMB5UXcgxaoJca+KgPK/QSV5urdyv0nEvcBNagQ54rKyu4D+o+zPAG+qTHV0vakq90TumLBfwHPUfMvOAQ0D7wN+guFBTtWQDeH70cAkBd8BEwNBTtiQNR0X/8lvkVYAAkD2qArtMVSgAAAABJRU5ErkJggg==)
 		no-repeat
 		70% 50%;
-	background-size:1.1em;
+	background-size:11px;
 }
 
 /*
@@ -223,10 +224,10 @@ tip
 	box-shadow:0 0 0 .1em rgba(0,0,0,0.1), .1em .1em .3em .1em rgba(0,0,0,0.1), 0 1.2em .4em -0.8em rgba(0, 0, 0, 0.1);
 	line-height:1.3;
 	font-size:.9em;
-	text-shadow:0 .1em 0 #fff;
+	text-shadow:0 1px 0 #fff;
 	text-align:center;
 	display:none;
-    z-index: 10;
+    z-index: 999999;
     bottom: 50%;
 }
 .tf-icon-after .fc-tip-text {
@@ -285,7 +286,7 @@ textarea
 	color:inherit;
 	width:100%;
 	min-height:5em;
-	text-shadow:0 .1em .25em rgba(0,0,0,0.2);
+	text-shadow:0 1px .25em rgba(0,0,0,0.2);
 	line-height:1.2;
 }
 .tf-area textarea:focus{
@@ -319,7 +320,7 @@ textarea
 	box-shadow:0 0 2px 1px #fff;
 }
 .tf-area textarea:disabled{
-	text-shadow:0 .1em 0 #fff;
+	text-shadow:0 1px 0 #fff;
 }
 
 
@@ -332,7 +333,7 @@ select
     position: absolute;
     top: 0;
     left: 500px;
-    /*display: none;*/
+    display: none;
 }
 .fc-sel {
     position: relative;
@@ -347,9 +348,6 @@ select
     background-image: -webkit-linear-gradient(top,#fcfcfc,#eaeaea);
     background-image: -moz-linear-gradient(top,#fcfcfc,#eaeaea);
     z-index: 2;
-}
-.fc-active .fc-sel-wrap {
-    border-bottom: 1px solid #aaa;
 }
 .fc-sel .fc-sel-arrow {
     position: absolute;
@@ -372,8 +370,8 @@ select
     margin: 0;
     display: none;
     position: absolute;
-    z-index: 1;
-    top: 90%;
+    z-index: 99999;
+    top: 98%;
     left: -1px;
     border: 1px solid #aaa;
     border-radius: 0 0 4px 4px;
@@ -404,6 +402,7 @@ select
 **********************************************/
 
 .fc-box input[type="checkbox"] {
+    display: none;
     position: absolute;
     top: 0;
     left: 500px;
@@ -412,10 +411,9 @@ select
     display: inline-block;
     height: 1.5em;
     width: 1.5em;
-    margin: 0 0.5em;
 }
 .fc-checkmark {
-    background: url(checkmark.png) no-repeat center center transparent;
+    background: url(../img/checkmark.png) no-repeat center center transparent;
     background-size: 18px 18px;
     height: 100%;
     width: 100%;
