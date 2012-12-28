@@ -32,25 +32,25 @@ SOFTWARE.
     }, opts);
 
     var $self = $(this),
-        selectors = opts.selectors || [
-            { type: 'TextField', selector: 'input[type="text"],input[type="password"],textarea' },
-            { type: 'Select', selector: 'select' },
-            { type: 'Tooltip', selector: '.tooltip' },
-            { type: 'Checkbox', selector: 'input[type="checkbox"]:not(.fc-switch)' },
-            { type: 'Switch', selector: 'input[type="checkbox"].fc-switch' }
-        ],
-        excludes = opts.excludes || '';
+      selectors = opts.selectors || [
+        { type: 'TextField', selector: 'input[type="text"],input[type="password"],textarea' },
+        { type: 'Select', selector: 'select' },
+        { type: 'Tooltip', selector: '.tooltip' },
+        { type: 'Checkbox', selector: 'input[type="checkbox"]:not(.fc-switch)' },
+        { type: 'Switch', selector: 'input[type="checkbox"].fc-switch' }
+      ],
+      excludes = opts.excludes || '';
 
     _.each(selectors, function( o ) {
-        $self.find(o.selector).not(excludes).each(function(){
-          var data = $(this).attr('data-options') || '{}', type = eval(o.type);
-          data = JSON.parse(data);
-          data.field = this;
-          if ( typeof type == 'function' ) {
-              var v = new type(data);
-              v.render();
-          }
-        });
+      $self.find(o.selector).not(excludes).each(function(){
+        var data = $(this).attr('data-options') || '{}', type = eval(o.type);
+        data = JSON.parse(data);
+        data.field = this;
+        if ( typeof type == 'function' ) {
+          var v = new type(data);
+          v.render();
+        }
+      });
     });
 
     return this;
@@ -64,6 +64,8 @@ SOFTWARE.
 
     initialize: function(){
       this.field = this.options.field;
+      this.field.control = this;
+      $(this.field).addClass('raw-feeld');
       $(this.field).replaceWith(this.el);
     },
     events: {
@@ -99,14 +101,18 @@ SOFTWARE.
       return this.$box.hasClass('fc-active');
     },
 
+    checkDisabled: function(){
+      this.$box[this.field.disabled ? 'addClass' : 'removeClass']('fc-disabled');
+    },
+
     commonRender: function() {
       var field = this.field;
       this.$el.html(this.layout);
       this.$box = this.$('.fc-box');
  
-      if (field.disabled) {
-        this.$box.addClass('fc-disabled');
-      } else if (field.autofocus) {
+      this.checkDisabled();
+      
+      if (field.autofocus) {
         $(field).focus();
       }
       
@@ -130,12 +136,12 @@ SOFTWARE.
 
   var TextField = Control.extend({
     initialize: function( args ) {
-        this.constructor.__super__.initialize.call( this, args );
-        this.events = $.extend({
-          'keydown input, textarea': 'keydown',
-          'paste input, textarea': 'paste',
-          'cut input, textarea': 'paste'
-        }, this.events);
+      this.constructor.__super__.initialize.call( this, args );
+      this.events = $.extend({
+        'keydown input, textarea': 'keydown',
+        'paste input, textarea': 'paste',
+        'cut input, textarea': 'paste'
+      }, this.events);
     },
     
     click: function(ev){
@@ -148,9 +154,9 @@ SOFTWARE.
         +'<span class="tf-icon tf-icon-before">'
           +'<span class="tf-icon-inner"></span>'
         +'</span>'
-        +'<span class="tf-placeholder">'
-          +'<span class="tf-placeholder-inner"></span>'
-        +'</span>'
+        //+'<span class="tf-placeholder">'
+        //  +'<span class="tf-placeholder-inner"></span>'
+        //+'</span>'
         +'<span class="tf-field">'
           +'<span class="tf-field-inner"></span>'
         +'</span>'
@@ -209,8 +215,8 @@ SOFTWARE.
     render: function() {
       this.constructor.__super__.commonRender.apply( this );
       
-      this.$('.tf-placeholder-inner').text(this.field.placeholder);
-      this.field.placeholder = '';
+      //this.$('.tf-placeholder-inner').text(this.field.placeholder);
+      //this.field.placeholder = '';
       this.currentVal = this.field.value;
       this.$('.tf-field-inner').html(this.field);
       this.maxLength = parseInt($(this.field).attr('maxlength'));
@@ -443,6 +449,34 @@ SOFTWARE.
       }
     }
   });
+
+  // ###########################################################
+  // automatically update disabled class
+
+  if (typeof document.getElementsByClassName === 'function') {
+    var rawFields = document.getElementsByClassName('raw-feeld');
+    (function check(){
+      var len = rawFields.length;
+      for (var i=0; i<len; i++) {
+        var rawField = rawFields[i],
+          isDisabled = rawField.disabled,
+          control = rawField.control;
+        if (!control) {
+          continue;
+        }
+        if (!rawField.feeldProps) {
+          rawField.feeldProps = {
+            disabled: isDisabled
+          };
+        } else {
+          if (rawField.feeldProps.isDisabled !== isDisabled && typeof control.checkDisabled === 'function') {
+            control.checkDisabled();
+          }
+        }
+      }
+      setTimeout(check, len === 0 ? 999 : 333);
+    })();
+  }
 
 })(jQuery);
 

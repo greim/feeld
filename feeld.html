@@ -34,7 +34,14 @@ body{
 <div class='column'> 
 <h2>Text fields</h2>
 
-<p><label><span class="foo-label">Field label</span> <input autofocus placeholder="Enter a value..." type="text"></label></p>
+<p><label><span class="foo-label">Field label</span> <input autofocus placeholder="Enter a value..." type="text" id="dtoggled"></label></p>
+<p><button id="dtoggler" type="button">Toggle disabled</button>
+<script>
+$('#dtoggler').on('click', function(){
+	var f = $('#dtoggled').get(0);
+	f.disabled = !f.disabled;
+});
+</script>
 <p><label><span class="foo-label">Field label</span> <input title="Lorem ipsum" type="text" value="some text"></label></p>
 <p><label><span class="foo-label">Field label</span> <input type="text" value="some text"></label></p>
 <p><label><span class="foo-label">Field label</span> <input class="error" type="text" value="some text"></label></p>
