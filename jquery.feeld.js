@@ -73,11 +73,11 @@ SOFTWARE.
       'change input, textarea, select': 'change'
     },
 
-      click: function(ev){
-//          console.log( 'super click', this.input );
-      },
+    click: function(ev){
+      //console.log( 'super click', this.input );
+    },
     focus: function(ev){
-//        console.log( 'super focus', this.input );
+      //console.log( 'super focus', this.input );
       this.showFocus(ev);
     },
     blur: function(ev){
@@ -96,7 +96,7 @@ SOFTWARE.
     },
 
     isActive: function() {
-        return this.$box.hasClass('fc-active');
+      return this.$box.hasClass('fc-active');
     },
 
     commonRender: function() {
@@ -114,7 +114,7 @@ SOFTWARE.
         this.$box.addClass('fc-error');
       }
 
-        // TODO: consider moving this section to TextField, doesn't apply to textboxes etc?
+      // TODO: consider moving this section to TextField, doesn't apply to textboxes etc?
       if ($(field).is('[title]')) {
         this.$box.addClass('fc-tip');
         var tip = $(field).attr('title');
@@ -132,16 +132,17 @@ SOFTWARE.
     initialize: function( args ) {
         this.constructor.__super__.initialize.call( this, args );
         this.events = $.extend({
-            'keydown input, textarea': 'keydown',
-            'paste input, textarea': 'paste',
-            'cut input, textarea': 'paste'
+          'keydown input, textarea': 'keydown',
+          'paste input, textarea': 'paste',
+          'cut input, textarea': 'paste'
         }, this.events);
     },
     
-      click: function(ev){
-//          console.log( 'textfield click', this.input );
-          $(this.input).focus();
-      },
+    click: function(ev){
+      //console.log( 'textfield click', this.input );
+      $(this.input).focus();
+    },
+
     layout: '<span class="fc fc-tf fc-box">'
       +'<span class="tf-inner">'
         +'<span class="tf-icon tf-icon-before">'
@@ -167,9 +168,9 @@ SOFTWARE.
       +'</span>'
     +'</span>',
 
-      keydown: function(ev){
-        this.checkChange(ev);
-      },
+    keydown: function(ev){
+      this.checkChange(ev);
+    },
     paste: function(ev){
       this.checkChange(ev);
     },
@@ -232,216 +233,216 @@ SOFTWARE.
     }
   });
 
-    var Select = Control.extend({
-        initialize: function( args ) {
-            this.constructor.__super__.initialize.apply( this, args );
+  var Select = Control.extend({
+    initialize: function( args ) {
+      this.constructor.__super__.initialize.apply( this, args );
 
-            this.events = $.extend({
-                'keydown select': 'keydown',
-                'click .fc-sel-option': 'optionClick',
-                'click .fc-sel': 'click',
-                'mouseover .fc-sel-option': 'optionHover'
-            }, Control.prototype.events);
-        },
+      this.events = $.extend({
+        'keydown select': 'keydown',
+        'click .fc-sel-option': 'optionClick',
+        'click .fc-sel': 'click',
+        'mouseover .fc-sel-option': 'optionHover'
+      }, Control.prototype.events);
+    },
 
-        layout: '<span class="fc fc-sel fc-box">'
-          + '<span class="fc-sel-wrap"><span class="fc-sel-arrow"></span><span class="fc-sel-text"></span></span>'
-          + '</span>',
+    layout: '<span class="fc fc-sel fc-box">'
+      + '<span class="fc-sel-wrap"><span class="fc-sel-arrow"></span><span class="fc-sel-text"></span></span>'
+      + '</span>',
 
-        listLayout: '<ul class="fc-sel-options"></ul>',
+    listLayout: '<ul class="fc-sel-options"></ul>',
 
-        optionLayout: '<li class="fc-sel-option"></li>',
+    optionLayout: '<li class="fc-sel-option"></li>',
 
-        click: function( e ) {
-            if ( this.$box.hasClass('fc-focus') ) {
-                clearTimeout( this.blurTimeout );
-            }
+    click: function( e ) {
+      if ( this.$box.hasClass('fc-focus') ) {
+        clearTimeout( this.blurTimeout );
+      }
 
-            $(this.field).focus();
-            this.showOptions();
-        },
+      $(this.field).focus();
+      this.showOptions();
+    },
 
-        showBlur: function( e ) {
-            var self = this;
+    showBlur: function( e ) {
+      var self = this;
 
-            e.stopPropagation();
+      e.stopPropagation();
 
-            this.blurTimeout = setTimeout( function() {
-                self.$box.removeClass('fc-focus');
-                self.hideOptions();
-            }, 200);
-        },
+      this.blurTimeout = setTimeout( function() {
+        self.$box.removeClass('fc-focus');
+        self.hideOptions();
+      }, 200);
+    },
 
-        showOptions: function() {
-            var idx = this.selectedIndex = this.selectedIndex === undefined ? 0 : this.selectedIndex;
-            this.$box.addClass('fc-active');
+    showOptions: function() {
+      var idx = this.selectedIndex = this.selectedIndex === undefined ? 0 : this.selectedIndex;
+      this.$box.addClass('fc-active');
 
-            $(this.opts).removeClass('fc-selected');
-            $(this.opts[idx]).addClass('fc-selected');
-        },
+      $(this.opts).removeClass('fc-selected');
+      $(this.opts[idx]).addClass('fc-selected');
+    },
 
-        hideOptions: function() {
-            this.$box.removeClass('fc-active');
-        },
+    hideOptions: function() {
+      this.$box.removeClass('fc-active');
+    },
 
-        checkChange: function() {
-            var val = $("option", this.field).filter(':selected').val();
+    checkChange: function() {
+      var val = $("option", this.field).filter(':selected').val();
 
-            if ( this.value != val ) {
-//                console.log( 'triggered' );
-                this.trigger('change', {
-                    oldValue: self.currentValue,
-                    newValue: val
-                });
-                this.value = val;
-            }
-        },
+      if ( this.value != val ) {
+        //console.log( 'triggered' );
+        this.trigger('change', {
+          oldValue: self.currentValue,
+          newValue: val
+        });
+        this.value = val;
+      }
+    },
 
-        selectOption: function( idx ) {
-            idx = idx || 0;
+    selectOption: function( idx ) {
+      idx = idx || 0;
 
-            var $displayOpt = $(this.opts[idx]),
-                $valueOpts = $(this.field.options),
-                $valueOpt = $(this.field.options[idx]);
+      var $displayOpt = $(this.opts[idx]),
+        $valueOpts = $(this.field.options),
+        $valueOpt = $(this.field.options[idx]);
 
-            $(this.opts).removeClass('fc-selected');
-            $displayOpt.addClass('fc-selected');
+      $(this.opts).removeClass('fc-selected');
+      $displayOpt.addClass('fc-selected');
 
-            $valueOpts.attr('selected', false);
-            $valueOpt.attr('selected', true);
+      $valueOpts.attr('selected', false);
+      $valueOpt.attr('selected', true);
 
-            this.currentText = $valueOpt.text();
-            this.selectedIndex = this.field.selectedIndex = idx;
-            this.$('.fc-sel-text').text( this.currentText );
+      this.currentText = $valueOpt.text();
+      this.selectedIndex = this.field.selectedIndex = idx;
+      this.$('.fc-sel-text').text( this.currentText );
 
-            this.checkChange();
-        },
+      this.checkChange();
+    },
 
-        keydown: function( e ) {
-            // TODO: chrome loses focus of the feeld input after up/down arrow and no longer fires events, ff ok
-//            console.log('before', e.keyCode, this.selectedIndex, this.opts );
-            if ( !this.isActive() && $.inArray(e.keyCode, [38, 40]) > -1 ) { // if options aren't showing, don't change the index and show the
-                this.selectedIndex = this.selectedIndex || 0;
-                this.showOptions();
-            } else if (e.keyCode == 38) { // up
-                if ( this.selectedIndex === 0 || this.selectedIndex == undefined ) {
-                    this.selectedIndex = this.opts.length - 1;
-                } else {
-                    this.selectedIndex--;
-                }
-
-                this.showOptions();
-            } else if (e.keyCode == 40) { // down
-                if ( this.selectedIndex === 0 || this.selectedIndex < this.opts.length - 1 ) {
-                    this.selectedIndex++;
-                } else if (!this.selectedIndex || this.selectedIndex == this.opts.length - 1 ) {
-                    this.selectedIndex = 0;
-                }
-
-                this.showOptions();
-            } else if (e.keyCode == 13 || e.keyCode == 39 || e.keyCode == 9) { // enter, tab
-                this.selectOption( this.selectedIndex );
-            }
-
-//            console.log('after', e.keyCode, this.selectedIndex, this.opts );
-            var $opt = $(this.opts[this.selectedIndex]);
-            $(this.opts).removeClass('fc-selected');
-            $opt.addClass('fc-selected');
-            this.currentText = $opt.text();
-            this.$('.fc-sel-text').text( this.currentText );
-        },
-
-        optionHover: function() {
-            $(this.opts).removeClass('fc-selected');
-        },
-
-        optionClick: function( e ) {
-            e.stopPropagation();
-            e.preventDefault();
-            clearTimeout( this.blurTimeout );
-
-            this.selectOption( $(e.currentTarget).index() );
-            this.hideOptions();
-            this.field.focus();
-//            this.checkChange();
-        },
-
-        render: function() {
-            var self = this, $opts = $('option', this.field), opt;
-            this.constructor.__super__.commonRender.apply( this );
-
-            this.value = this.field.value;
-
-            opt = $opts.filter(':selected')[0] || $opts[0];
-            this.currentText = opt && $(opt).text();
-            this.selectedIndex = this.field.selectedIndex;
-
-            this.$list = $( this.listLayout );
-            this.opts = [];
-            this.$text = this.$('.fc-sel-text').text( this.currentText );
-
-            _.each( this.field.options, function( opt ) {
-                var $o = $( self.optionLayout ).text( opt.text );
-                self.$list.append( $o );
-                self.opts.push( $o[0] );
-            });
-
-            this.$box.append( this.$list );
-            this.$box.append( this.field );
+    keydown: function( e ) {
+      // TODO: chrome loses focus of the feeld input after up/down arrow and no longer fires events, ff ok
+      //console.log('before', e.keyCode, this.selectedIndex, this.opts );
+      if ( !this.isActive() && $.inArray(e.keyCode, [38, 40]) > -1 ) { // if options aren't showing, don't change the index and show the
+        this.selectedIndex = this.selectedIndex || 0;
+        this.showOptions();
+      } else if (e.keyCode == 38) { // up
+        if ( this.selectedIndex === 0 || this.selectedIndex == undefined ) {
+          this.selectedIndex = this.opts.length - 1;
+        } else {
+          this.selectedIndex--;
         }
+
+        this.showOptions();
+      } else if (e.keyCode == 40) { // down
+        if ( this.selectedIndex === 0 || this.selectedIndex < this.opts.length - 1 ) {
+          this.selectedIndex++;
+        } else if (!this.selectedIndex || this.selectedIndex == this.opts.length - 1 ) {
+          this.selectedIndex = 0;
+        }
+
+        this.showOptions();
+      } else if (e.keyCode == 13 || e.keyCode == 39 || e.keyCode == 9) { // enter, tab
+        this.selectOption( this.selectedIndex );
+      }
+
+      //console.log('after', e.keyCode, this.selectedIndex, this.opts );
+      var $opt = $(this.opts[this.selectedIndex]);
+      $(this.opts).removeClass('fc-selected');
+      $opt.addClass('fc-selected');
+      this.currentText = $opt.text();
+      this.$('.fc-sel-text').text( this.currentText );
+    },
+
+    optionHover: function() {
+      $(this.opts).removeClass('fc-selected');
+    },
+
+    optionClick: function( e ) {
+      e.stopPropagation();
+      e.preventDefault();
+      clearTimeout( this.blurTimeout );
+
+      this.selectOption( $(e.currentTarget).index() );
+      this.hideOptions();
+      this.field.focus();
+      //this.checkChange();
+    },
+
+    render: function() {
+      var self = this, $opts = $('option', this.field), opt;
+      this.constructor.__super__.commonRender.apply( this );
+
+      this.value = this.field.value;
+
+      opt = $opts.filter(':selected')[0] || $opts[0];
+      this.currentText = opt && $(opt).text();
+      this.selectedIndex = this.field.selectedIndex;
+
+      this.$list = $( this.listLayout );
+      this.opts = [];
+      this.$text = this.$('.fc-sel-text').text( this.currentText );
+
+      _.each( this.field.options, function( opt ) {
+        var $o = $( self.optionLayout ).text( opt.text );
+        self.$list.append( $o );
+        self.opts.push( $o[0] );
+      });
+
+      this.$box.append( this.$list );
+      this.$box.append( this.field );
+    }
   });
 
-    var Checkbox = Control.extend({
-        tagName: 'span',
-        layout: '<span class="fc-checkbox fc-box fc"><span class="fc-checkmark"></span></span>',
-        focus: function( e ) {
-            this.showFocus();
-        },
-        checkChange: function() {
-//            console.log( 'checkbox change', this.field.checked );
+  var Checkbox = Control.extend({
+    tagName: 'span',
+    layout: '<span class="fc-checkbox fc-box fc"><span class="fc-checkmark"></span></span>',
+    focus: function( e ) {
+      this.showFocus();
+    },
+    checkChange: function() {
+      //console.log( 'checkbox change', this.field.checked );
 
-            this.field.checked ? this.$box.addClass('fc-checked') : this.$box.removeClass('fc-checked');
-            this.trigger('change');
-        },
-        render: function() {
-            this.constructor.__super__.commonRender.apply( this );
+      this.field.checked ? this.$box.addClass('fc-checked') : this.$box.removeClass('fc-checked');
+      this.trigger('change');
+    },
+    render: function() {
+      this.constructor.__super__.commonRender.apply( this );
 
-            if ( $(this.field).attr('checked') ) {
-                this.$box.addClass('fc-checked');
-            }
+      if ( $(this.field).attr('checked') ) {
+        this.$box.addClass('fc-checked');
+      }
 
-            this.$box.append( this.field );
-        }
-    });
+      this.$box.append( this.field );
+    }
+  });
 
-    var Switch = Checkbox.extend({
-        tagName: 'span',
-        layout: '<span class="fc-switch fc-box">' +
-            '<span class="fc-switch-left"></span><span class="fc-switch-toggle"></span><span class="fc-switch-right"></span>' +
-            '</span>'
-    });
+  var Switch = Checkbox.extend({
+    tagName: 'span',
+    layout: '<span class="fc-switch fc-box">' +
+      '<span class="fc-switch-left"></span><span class="fc-switch-toggle"></span><span class="fc-switch-right"></span>' +
+      '</span>'
+  });
 
-    var Tooltip = Backbone.View.extend({
+  var Tooltip = Backbone.View.extend({
 
-        initialize: function(){
-            this.field = this.options.field;
-            $(this.field).replaceWith(this.el);
-            this.customHtml = $(this.field).html();
-        },
-    
-        layout: '<span class="fc-tip fc-tooltip">'
-                + '<span class="fc-icon"></span>'
-                + '<span class="fc-tip-text"></span>'
-            +'</span>',
+    initialize: function(){
+      this.field = this.options.field;
+      $(this.field).replaceWith(this.el);
+      this.customHtml = $(this.field).html();
+    },
 
-        render: function() {
-            this.$el.html(this.layout);
-            this.$el.find('.fc-tip-text').html(this.customHtml);
-            if (this.customHtml.length > 25) {
-                this.$el.addClass('fc-bigtip');
-            }
-        }
-    });
+    layout: '<span class="fc-tip fc-tooltip">'
+      + '<span class="fc-icon"></span>'
+      + '<span class="fc-tip-text"></span>'
+      +'</span>',
+
+    render: function() {
+      this.$el.html(this.layout);
+      this.$el.find('.fc-tip-text').html(this.customHtml);
+      if (this.customHtml.length > 25) {
+        this.$el.addClass('fc-bigtip');
+      }
+    }
+  });
 
 
 })(jQuery);
